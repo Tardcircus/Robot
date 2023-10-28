@@ -13,6 +13,16 @@ PWM=Motor()
 servo=Servo() 
 ultrasonic=Ultrasonic() 
 
+def Road_Ultrasonic():
+    global Road
+    data=ultrasonic.get_distance()   #Get the value
+    distance=int(data)
+    InRoad = str(distance)
+    if InRoad <= '20':
+        Road = "Blocked"
+        RT.TTS("The Road is Blocked idiot")
+    else:
+        Road = "Clear"
 
 # Move commands for robot
 def move_command(words):
@@ -36,15 +46,20 @@ def move_command(words):
         elif word == "forward":
             print("----Robot travels forward")
             RT.TTS("ill go forward i guess")
-            PWM.setMotorModel(2000,2000)
-            time.sleep(1)
-            PWM.setMotorModel(0,0)              #Stop
+            while True:
+                Road_Ultrasonic()
+                if Road == "Clear":
+                    PWM.setMotorModel(2000,2000)
+                    sleep(0.1)
+                elif Road == "Blocked":
+                    PWM.setMotorModel(0,0)
+                    break
 
         elif word == "backwards":
             print("----Robot moved backwards")
             RT.TTS("Ill go backwards")
             PWM.setMotorModel(-2000,-2000)       #Left 
-            time.sleep(1)
+            time.sleep(2)
             PWM.setMotorModel(0,0)              #Stop
 
         elif word == "stop":
