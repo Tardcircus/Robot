@@ -1,46 +1,58 @@
-import Motor
-import servo
+import Robot_Talk as RT
 
+import RPi.GPIO as GPIO
 import time
+from Motor import *
+from servo import *
+from Ultrasonic import *
+from Action import *
+from Line_Tracking import *
+from time import sleep
+
+PWM=Motor()
+servo=Servo() 
+ultrasonic=Ultrasonic() 
 
 
 # Move commands for robot
 def move_command(words):
     print("--Move command found")
-    PWM = Motor
     for word in words:
 
         if word == "left":
             print("---Robot turns 90 degrees left")
-            try:
-                PWM.setMotorModel(-2000,2000)       #Left 
-                time.sleep(1)
-            except KeyboardInterrupt:
-                PWM.setMotorModel(0,0)              #Stop
+            RT.TTS("Im Turning left")
+            PWM.setMotorModel(-2000,2000)       #Left 
+            time.sleep(1)
+            PWM.setMotorModel(0,0)              #Stop
         
         elif word == "right":
             print("----Robot turns 90 degrees right")
-            try:
-                PWM.setMotorModel(2000,-2000)       #Left 
-                time.sleep(1)
-            except KeyboardInterrupt:
-                PWM.setMotorModel(0,0)              #Stop
+            RT.TTS("Im turning right")
+            PWM.setMotorModel(2000,-2000)       #Left 
+            time.sleep(1)
+            PWM.setMotorModel(0,0)              #Stop
 
         elif word == "forward":
             print("----Robot travels forward")
-            try:
-                PWM.setMotorModel(2000,2000)       #Left 
-                time.sleep(1)
-            except KeyboardInterrupt:
-                PWM.setMotorModel(0,0)              #Stop
+            RT.TTS("ill go forward i guess")
+            PWM.setMotorModel(2000,2000)
+            time.sleep(1)
+            PWM.setMotorModel(0,0)              #Stop
 
         elif word == "backwards":
             print("----Robot moved backwards")
-            try:
-                PWM.setMotorModel(-2000,-2000)       #Left 
-                time.sleep(1)
-            except KeyboardInterrupt:
-                PWM.setMotorModel(0,0)              #Stop
+            RT.TTS("Ill go backwards")
+            PWM.setMotorModel(-2000,-2000)       #Left 
+            time.sleep(1)
+            PWM.setMotorModel(0,0)              #Stop
+
+        elif word == "stop":
+            print("----Robot moved backwards")
+            RT.TTS("Stop what?")
+            PWM.setMotorModel(0,0)       #Left 
+            time.sleep(1)
+            PWM.setMotorModel(0,0)              #Stop
             # Program MUST mutithread and exit when new command is recieved
 
 # Move the arm and claw
